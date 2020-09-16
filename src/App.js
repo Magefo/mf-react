@@ -1,23 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useCallback } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import { shellAdd, shellSubstract, useEventListener } from "./IframeService";
 
 function App() {
+  const [count, setCount] = useState(1);
+
+  const handler = useCallback(
+    ({ origin, data }) => {
+      if (origin !== "http://localhost:3000") {
+        return;
+      }
+      if (data.event === "add") {
+        setCount(count + 1);
+      }
+      if (data.event === "substract") {
+        setCount(count - 1);
+      }
+    },
+    [count, setCount]
+  );
+
+  useEventListener(handler);
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h3>Counter: {count}</h3>
+        <div className="App-buttons">
+          <button onClick={() => shellAdd()}>Shell Add</button>
+          <button onClick={() => shellSubstract()}>Shell Substract</button>
+          <button onClick={() => setCount(count + 1)}>Local Add</button>
+          <button onClick={() => setCount(count - 1)}>Local Substract</button>
+        </div>
       </header>
     </div>
   );
