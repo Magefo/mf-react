@@ -1,16 +1,15 @@
 import { useRef, useEffect } from "react";
 
+const shellOrigin = "http://localhost:4000";
+
 export function shellAdd() {
-  window.parent.postMessage(
-    { app: "MF_ANGULAR", event: "add" },
-    "http://localhost:3000"
-  );
+  window.parent.postMessage({ app: "MF_REACT", event: "add" }, shellOrigin);
 }
 
-export function shellSubstract() {
+export function shellSubtract() {
   window.parent.postMessage(
-    { app: "MF_ANGULAR", event: "substract" },
-    "http://localhost:3000"
+    { app: "MF_REACT", event: "subtract" },
+    shellOrigin
   );
 }
 
